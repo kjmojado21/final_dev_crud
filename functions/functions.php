@@ -81,12 +81,15 @@ function updateUser($id, $fname, $lname, $username, $password, $bDate)
 function login($username, $password)
 {
     $conn = connection();
+    // the query for login
     $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
     $result = $conn->query($sql);
 
+    //if the query returns one data- do the code inside if else
     if($result->num_rows==1){
         $row = $result->fetch_assoc();
-
+        
+        //session is a pre defined variable the will hold the data that has been saved inside your machine, in this case im passing the user id from the database in sesion
         $_SESSION['login_id'] = $row['user_id'];
 
 
@@ -102,15 +105,19 @@ function login($username, $password)
 }
 
 function uploadPhoto($id,$photoName){
+    // the folder that will hold the uploaded files
     $target_dir = 'uploads/';
+    //basename() gets the file name.. returns a value of string since filename is letters.
     $target_file = $target_dir.basename($photoName);
     $conn = connection();
+    //a simple updating query for img
     $sql = "UPDATE users SET user_img = '$photoName' WHERE user_id = '$id'";
     $result = $conn->query($sql);
 
     if($result == FALSE){
         die('unable to upload photo'.$conn->connect_error);
     }else{
+        //move uploaded files creates a copy of your picture and moving it inside the directory
         move_uploaded_file($_FILES['picture']['tmp_name'],$target_file);
         header('location:read.php');
     }

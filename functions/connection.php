@@ -1,4 +1,5 @@
 <?php 
+// session will save your data inside your machine
 session_start();
 // function of our database connection
 function connection(){
